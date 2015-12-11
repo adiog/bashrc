@@ -1,12 +1,11 @@
 # bashrc
 
-my sample .bashrc file
+My sample .bashrc file
 
 # marks
 
-simple bashmarks (m - mark, g - go, l - list)
+Simple bashmarks (m - mark, g - go, l - list). Usage:
 ```
-usage:
 $ m         - store current location (unnamed mark)
 $ m <MARK>  - store current location under <MARK>
 $ g         - change dir to the last unnamed mark
