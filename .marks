@@ -1,0 +1,79 @@
+#!/bin/bash
+# Copyleft 2015 Aleksander Gajewski <adiog@brainfuck.pl>
+#   created:  Sun 26 Oct 2014 11:01:45 AM CET
+#   modified: Fri 11 Dec 2015 03:27:18 PM CET
+
+# usage:
+# $ m         - store current location (unnamed mark)
+# $ m <MARK>  - store current location under <MARK>
+# $ g         - change dir to the last unnamed mark
+# $ g <MARK>  - change dir to location stored under <MARK> (use <TAB> to autocomplete)
+# $ l         - list all marks
+# $ d <MARK>  - remove <MARK>
+
+# bash marks
+MARKS_DIR=~/.bashmarks
+MARKS_CWD=.cwd
+mkdir -p $MARKS_DIR
+
+function _l() {
+  ls $MARKS_DIR
+}
+
+function _m() {
+  pwd > $MARKS_DIR/$1
+}
+
+function m() {
+  [[ -z "$1" ]] && _m $MARKS_CWD
+  [[ -z "$1" ]] || _m $1
+}
+
+function d() {
+  rm $MARKS_DIR/$1
+}
+
+function l(){
+  echo " : $(< $MARKS_DIR/$MARKS_CWD)"
+  for m in `_l`; do
+    echo "$m: $(< $MARKS_DIR/$m)"
+  done
+}
+
+function lr_(){
+  for m in `_l`; do
+    echo "$(< $MARKS_DIR/$m) ($m)"
+  done
+}
+
+function lr(){
+  lr_ | sort
+}
+
+function g() {
+  [[ -z "$1" ]] && cd "$(< $MARKS_DIR/$MARKS_CWD)" && return
+  [[ -f "$MARKS_DIR/$1" ]] && cd "$(< $MARKS_DIR/$1)"
+  [[ -f "$MARKS_DIR/$1" ]] || cd $(grep -h "$1" $MARKS_DIR/* | head -n 1) || echo "Mark $1 not set"
+}
+
+function _comp {
+  local curw
+  COMPREPLY=()
+  curw=${COMP_WORDS[COMP_CWORD]}
+  COMPREPLY=($(compgen -W '`_l`' -- $curw))
+  return 0
+}
+
+shopt -s progcomp
+complete -F _comp g
+complete -F _comp l
+complete -F _comp d
+
+PROMPT_COMMAND='m'
+
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias ......="cd ../../../../.."
+
