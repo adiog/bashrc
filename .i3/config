@@ -1,0 +1,233 @@
+# is config file used by Aleksander Gajewski <adiog@brainfuck.pl>
+
+# i3 config file (v4)
+#
+# Please see http://i3wm.org/docs/userguide.html for a complete reference!
+
+set $mod Mod4
+
+# font for window titles
+font pango:DejaVu Sans Mono 7
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# start a terminal
+bindsym $mod+Return exec "gnome-terminal"
+
+# start a file explorer
+bindsym $mod+Shift+Return exec "nautilus"
+
+# kill focused window
+bindsym Mod1+F4 kill
+bindsym $mod+Shift+Delete exec "xkill"
+
+# start gmrun (a program launcher)
+bindsym $mod+r exec "gmrun"
+for_window [class="Gmrun"] floating enable
+
+# change focus
+bindsym $mod+h focus left
+bindsym $mod+t focus down
+bindsym $mod+n focus up
+bindsym $mod+s focus right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+t move down
+bindsym $mod+Shift+n move up
+bindsym $mod+Shift+s move right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# split in horizontal orientation
+bindsym $mod+d split h
+
+# split in vertical orientation
+bindsym $mod+i split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+u fullscreen
+
+# always on top (when floating)
+bindsym $mod+Shift+u sticky toggle
+
+# change container layout (stacked, tabbed, default)
+bindsym $mod+o layout stacking
+bindsym $mod+comma layout tabbed
+bindsym $mod+period layout default
+
+# toggle tiling / floating
+bindsym $mod+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+Shift+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# toggle workspace
+workspace_auto_back_and_forth yes
+
+# switch to workspace
+bindsym $mod+F1 workspace 1
+bindsym $mod+F2 workspace 2
+bindsym $mod+F3 workspace 3
+bindsym $mod+F4 workspace 4
+bindsym $mod+F5 workspace 5
+bindsym $mod+F6 workspace 6
+bindsym $mod+F7 workspace 7
+bindsym $mod+F8 workspace 8
+bindsym $mod+F9 workspace 9
+bindsym $mod+F10 workspace 10
+bindsym $mod+F11 workspace 11
+bindsym $mod+F12 workspace 12
+
+# switch to workspace (second row)
+bindsym $mod+ampersand workspace "X1"
+bindsym $mod+bracketleft workspace "X2"
+bindsym $mod+braceleft workspace "X3"
+bindsym $mod+braceright workspace "X4"
+bindsym $mod+parenleft workspace "X5"
+bindsym $mod+equal workspace "X6"
+bindsym $mod+asterisk workspace "X7"
+bindsym $mod+parenright workspace "X8"
+bindsym $mod+plus workspace "X9"
+bindsym $mod+bracketright workspace "X10"
+
+# move focused container to workspace
+bindsym $mod+Ctrl+F1 move container to workspace 1; workspace 1
+bindsym $mod+Ctrl+F2 move container to workspace 2; workspace 2
+bindsym $mod+Ctrl+F3 move container to workspace 3; workspace 3
+bindsym $mod+Ctrl+F4 move container to workspace 4; workspace 4
+bindsym $mod+Ctrl+F5 move container to workspace 5; workspace 5
+bindsym $mod+Ctrl+F6 move container to workspace 6; workspace 6
+bindsym $mod+Ctrl+F7 move container to workspace 7; workspace 7
+bindsym $mod+Ctrl+F8 move container to workspace 8; workspace 8
+bindsym $mod+Ctrl+F9 move container to workspace 9; workspace 9
+bindsym $mod+Ctrl+F10 move container to workspaces 10; workspace 10
+bindsym $mod+Ctrl+F11 move container to workspacel 11; workspace 11
+bindsym $mod+Ctrl+F12 move container to workspacel 12; workspace 12
+
+# move focused container to workspace (second row)
+bindsym $mod+Shift+F1 move container to workspace "X1"; workspace "X1"
+bindsym $mod+Shift+F2 move container to workspace "X2"; workspace "X2"
+bindsym $mod+Shift+F3 move container to workspace "X3"; workspace "X3"
+bindsym $mod+Shift+F4 move container to workspace "X4"; workspace "X4"
+bindsym $mod+Shift+F5 move container to workspace "X5"; workspace "X5"
+bindsym $mod+Shift+F6 move container to workspace "X6"; workspace "X6"
+bindsym $mod+Shift+F7 move container to workspace "X7"; workspace "X7"
+bindsym $mod+Shift+F8 move container to workspace "X8"; workspace "X8"
+bindsym $mod+Shift+F9 move container to workspace "X9"; workspace "X9"
+bindsym $mod+Shift+F10 move container to workspace "X10"; workspace "X10"
+
+# define output for workspace
+workspace 1 output LVDS1
+workspace 2 output LVDS1
+workspace 3 output LVDS1
+workspace 4 output LVDS1
+workspace 5 output LVDS1
+workspace 6 output LVDS1
+workspace 7 output LVDS1
+workspace 8 output LVDS1
+workspace 9 output LVDS1
+workspace 10 output LVDS1
+workspace 11 output LVDS1
+workspace 12 output LVDS1
+
+# define output for workspace (second row)
+workspace "X1" output VGA1
+workspace "X2" output VGA1
+workspace "X3" output VGA1
+workspace "X4" output VGA1
+workspace "X5" output VGA1
+workspace "X6" output VGA1
+workspace "X7" output VGA1
+workspace "X8" output VGA1
+workspace "X9" output VGA1
+workspace "X10" output VGA1
+
+# named workspaces
+bindsym XF86WebCam workspace Extra
+bindsym $mod+XF86WebCam move container to workspace Extra; workspace Extra
+
+bindsym $mod+Home workspace Home
+bindsym $mod+Shift+Home move container to workspace Home; workspace Home
+
+bindsym XF86AudioMedia workspace Media
+bindsym $mod+XF86AudioMedia move container to workspace Media; workspace Media
+
+bindsym $mod+Delete workspace Background
+bindsym XF86Sleep move container to workspace Background
+
+# scratchpad
+bindsym $mod+BackSpace move scratchpad
+bindsym $mod+Shift+BackSpace scratchpad show
+bindsym XF86Calculator scratchpad show
+bindsym $mod+XF86Calculator exec "gnome-terminal -e vim && i3-msg 'move scratchpad; scratchpad show'"
+
+# lock & exit
+bindsym $mod+XF86Sleep exec "i3lock -n -i /home/adiog/Config/backgrounds/speaker.png"
+bindsym $mod+Shift+XF86Sleep exec /opt/bin/i3-exit
+for_window [class="I3-exit" instance="i3-exit"] floating enable
+
+# gkrell & htop
+bindsym $mod+y exec "kill `pidof gkrellm` || gkrellm"
+for_window [title="gkrellm"] floating enable
+bindsym $mod+f exec "kill `pidof htop` || gnome-terminal -e htop && && i3-msg 'floating enable'"
+
+# quickswitch
+bindsym $mod+Tab exec "/home/adiog/Config/i3/quickswitch.py"
+
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+p restart
+
+# keyboard layout (dvorak <-> qwerty)
+bindsym $mod+Shift+z exec "setxkbmap -layout pl -variant dvp"
+bindsym $mod+Shift+apostrophe exec "setxkbmap -layout us"
+
+# media buttons
+bindsym XF86AudioLowerVolume exec "amixer -D pulse set Master unmute && amixer -c 0 set Master 5- && kill -s 10 `pidof i3blocks`"
+bindsym XF86AudioRaiseVolume exec "amixer -D pulse set Master unmute && amixer -c 0 set Master 5+ && kill -s 10 `pidof i3blocks`"
+bindsym XF86AudioMute exec "amixer -D pulse set Master toggle && kill -s 10 `pidof i3blocks`"
+bindsym XF86AudioPlay exec audtool --playback-playpause
+bindsym XF86AudioStop exec audtool --playback-stop
+bindsym XF86AudioNext exec audtool --playlist-advance
+bindsym XF86AudioPrev exec audtool --playlist-reverse
+
+# misc
+for_window [class="file_progress"] floating enable
+
+# i3slime: custom commands
+bindsym $mod+Shift+r exec ~/.i3slime/gnome.sh
+bindsym $mod+x ~/.i3slime/gettext.sh
+bindsym $mod+v ~/.i3slime/puttext.sh
+
+# copy from clipboard
+bindsym $mod+Shift+v exec "~/.quicksave.py"
+#"xsel -b >> ~/.quicksave/db.txt"; exec "echo >> ~/.quicksave/db.txt"
+
+# common startup
+exec --no-startup-id exec "feh --bg-center ~/dotfiles/pics/Terraform-green.jpg"
+exec --no-startup-id i3-msg 'workspace 1; exec /opt/firefox/firefox'
+exec --no-startup-id i3-msg 'workspace 2; exec nautilus'
+exec --no-startup-id i3-msg 'exec "nm-applet &"'
+
+# status bar
+bar {
+    status_command i3status
+    position          bottom
+    workspace_buttons yes
+    # output            LVDS1
+}
+
