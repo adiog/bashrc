@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cat $1 | fastcc.py > _$1
+g++ -std=c++14 -ggdb -fsanitize=address _$1
+rm _$1
+
