@@ -1,0 +1,89 @@
+#!/bin/bash
+# Copyright 2016 Aleksander Gajewski <adiog@brainfuck.pl>
+#   created:  Fri 08 Apr 2016 11:12:48 PM CEST
+#   modified: Sat 09 Apr 2016 08:44:51 AM CEST
+
+# CMake/CTest test execution
+# ADD_TEST(<test_name> 
+#             EXEC <executable_absolute_path>
+#             [INPUT <input_file_absolute_path>]
+#             [EXPECTED_OUTPUT <std_output_file_absolute_path>]
+#             [EXPECTED_ERROR <std_error_file_absolute_path>]
+#             [TIMEOUT <timeout>]
+#             [FORBID_NOISE])
+#
+# if FORBID_NOISE flag is set than any non-empty stdout/stderr will raise an error.
+
+# BASH_CLEANUP {{{
+BASH_CLEANUP_FILE=`mktemp`
+trap BASH_CLEANUP EXIT
+
+function BASH_CLEANUP() {
+  BASH_CLEANUP_FILE_REV=`mktemp`
+  tac $BASH_CLEANUP_FILE > $BASH_CLEANUP_FILE_REV
+  . $BASH_CLEANUP_FILE_REV
+  rm $BASH_CLEANUP_FILE $BASH_CLEANUP_FILE_REV
+}
+
+function BASH_FINALLY() {
+  echo "$*" >> $BASH_CLEANUP_FILE
+}
+
+function BASH_MKTEMP() {
+  BASH_TMP=`mktemp`
+  echo "rm $BASH_TMP" >> $BASH_CLEANUP_FILE
+  echo $BASH_TMP
+}
+
+function BASH_MKTEMP_DIR() {
+  BASH_TMP=`mktemp -d`
+  echo "rm -fr $BASH_TMP" >> $BASH_CLEANUP_FILE
+  echo $BASH_TMP
+}
+# }}}
+
+OUTPUT=`BASH_MKTEMP`
+ERROR=`BASH_MKTEMP`
+
+EXEC=$1
+shift 1
+while [[ -n "$2" ]]; do
+  if [[ "$1" == "INPUT" ]]; then
+    INPUT=$2
+  fi
+  if [[ "$1" == "EXPECTED_OUTPUT" ]]; then
+    EXPECTED_OUTPUT=$2
+  fi
+  if [[ "$1" == "EXPECTED_ERROR" ]]; then
+    EXPECTED_ERROR=$2
+  fi
+  if [[ "$1" == "TIMEOUT" ]]; then
+    TIMEOUT=$2
+  fi
+  shift 2
+done
+
+if [[ -z "$TIMEOUT" ]]; then
+  TIMEOUT=10s
+fi
+
+if [[ -n "$INPUT" ]]; then
+  timeout --preserve-status $TIMEOUT $EXEC < $INPUT > $OUTPUT 2> $ERROR || exit 1
+else 
+  timeout --preserve-status $TIMEOUT $EXEC > $OUTPUT 2> $ERROR || exit 1
+fi
+
+(echo "#####"; cat $INPUT; echo "#####"; cat $OUTPUT; echo "#####"; cat $EXPECTED_OUTPUT;) >> /tmp/log.txt
+if [[ -n "$EXPECTED_OUTPUT" ]]; then
+  diff $EXPECTED_OUTPUT $OUTPUT 2>&1 > /dev/null || exit 1
+else
+  [[ -s $OUTPUT ]] && [[ "$1" == "FORBID_NOISE" ]] && exit 1
+fi
+if [[ -n "$EXPECTED_ERROR" ]]; then
+  diff $EXPECTED_ERROR $ERROR 2>&1 > /dev/null || exit 1
+else
+  [[ -s $ERROR ]] && [[ "$1" == "FORBID_NOISE" ]] && exit 1
+fi
+
+exit 0
+
