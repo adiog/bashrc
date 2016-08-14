@@ -1,0 +1,82 @@
+#!/bin/bash
+# Copyright 2016 Aleksander Gajewski <adiog@brainfuck.pl>
+#   created:  Sun 14 Aug 2016 02:04:41 PM CEST
+#   modified: Sun 14 Aug 2016 03:16:21 PM CEST
+
+# BASH_CLEANUP {{{
+BASH_CLEANUP_FILE=`mktemp`
+trap BASH_CLEANUP EXIT
+
+function BASH_CLEANUP() {
+  BASH_CLEANUP_FILE_REV=`mktemp`
+  tac $BASH_CLEANUP_FILE > $BASH_CLEANUP_FILE_REV
+  . $BASH_CLEANUP_FILE_REV
+  rm $BASH_CLEANUP_FILE $BASH_CLEANUP_FILE_REV
+}
+
+function BASH_FINALLY() {
+  echo "$*" >> $BASH_CLEANUP_FILE
+}
+
+function BASH_MKTEMP() {
+  BASH_TMP=`mktemp`
+  echo "rm $BASH_TMP" >> $BASH_CLEANUP_FILE
+  echo $BASH_TMP
+}
+
+function BASH_MKTEMP_DIR() {
+  BASH_TMP=`mktemp -d`
+  echo "rm -fr $BASH_TMP" >> $BASH_CLEANUP_FILE
+  echo $BASH_TMP
+}
+# }}}
+
+function merge_include()
+{
+  FILE=$1
+  RANGE_FILE=`BASH_MKTEMP`
+  cat -n $FILE | grep "#include" | sed -e "s/\s//g" | cut -d'#' -f1 > $RANGE_FILE
+  RANGE_BEGIN=`cat $RANGE_FILE | head -n 1`
+  RANGE_END=`cat $RANGE_FILE | tail -n 1`
+  RANGE="$RANGE_BEGIN,$RANGE_END"
+  sed -e "${RANGE} {/^$/d}" -i $FILE
+}
+
+function split_include()
+{
+  FILE=$1
+  REGEX=`cat .clang-format | grep Regex | sed -e "s/\^//" -e "s/[^']*'\(.*\)'.*/\1/"`
+  set -f
+  REGEX_ARR=($REGEX)
+  set +f
+  REGEX_LEN=${#REGEX_ARR[@]}
+     
+  LINES_TO_ADD=""
+
+  for (( i=0; i<${REGEX_LEN}; i++ ));
+  do
+    echo "${REGEX_ARR[$i]}"
+    cat -n $FILE | grep -e "#include ${REGEX_ARR[$i]}" 
+    LINE_TO_ADD=`cat -n $FILE | grep -e "#include ${REGEX_ARR[$i]}" | sed -e "s/\s//g" | cut -d'#' -f1 | tail -n 1`
+    LINES_TO_ADD="$LINE_TO_ADD $LINES_TO_ADD"
+  done
+
+  for line_to_add in $LINES_TO_ADD;
+  do
+    echo inserting line $line_to_add
+    sed -e "$((${line_to_add} + 1))i\ " -i $FILE
+  done
+}
+
+function clang-format-include() 
+{
+  FILE=$1
+  merge_include $FILE
+  clang-format -i $FILE
+  split_include $FILE
+  clang-format -style="{MaxEmptyLinesToKeep: 1}" -i $FILE
+    
+  LINE_TO_ADD=`cat -n $FILE | grep -e "#include" | sed -e "s/\s//g" | cut -d'#' -f1 | tail -n 1`
+  sed -e "$(($LINE_TO_ADD + 1))i\ " -i $FILE
+  clang-format -i $FILE
+}
