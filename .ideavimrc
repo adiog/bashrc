@@ -1,0 +1,17 @@
+set showmode
+set hlsearch
+
+nnoremap t gj
+nnoremap n gk
+nnoremap s l
+nnoremap j t
+nnoremap k n
+nnoremap l s
+
+vnoremap t gj
+vnoremap n gk
+vnoremap s l
+vnoremap j t
+vnoremap k n
+vnoremap l s
+
