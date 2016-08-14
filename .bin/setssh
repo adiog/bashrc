@@ -1,0 +1,13 @@
+#!/bin/bash
+
+HOST=$1
+KEY=$HOME/.ssh/id_rsa
+KEYPUB=$KEY.pub
+if [ -e $KEYPUB ]; then
+    echo 'key already exists.'
+else 
+    ssh-keygen -f $KEY -t rsa
+fi
+ssh $HOST 'mkdir -p .ssh'
+cat $KEYPUB | ssh $HOST 'cat >> .ssh/authorized_keys'
+
