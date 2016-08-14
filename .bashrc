@@ -13,6 +13,7 @@ stty -ixon
 
 
 alias bc="bc -l"
+alias ll="ls --color -la"
 alias grep="grep --color"
 alias hg="hg -v"
 alias vim="vim -p"
@@ -45,6 +46,24 @@ function hi() {
   grep --color -E "${PATTERN}|\$" $*
 }
 
+function hilimit() {
+  grep --color -E "^.{${COLUMNLIMIT:-120}}.+|^" $*
+}
+
+function limit() {
+  grep -q -E "^.{${COLUMNLIMIT:-120}}.+" $*
+}
+
+function formatted() {
+  file=$1
+  tmp=`mktemp`
+  clang-format $file > $tmp
+  diff -q $file $tmp 
+  code=$?
+  rm $tmp
+  return $code
+}
+
 function findcpp() {
   find . -name "*.cpp" \
      -or -name "*.cc" \
@@ -58,6 +77,10 @@ function xgrep() {
 
 function names() {
   cat - | cut -d: -f1 | sort | uniq
+}
+
+function doseol() {
+  file $1 | grep -q CRLF
 }
 
 function replace() {
