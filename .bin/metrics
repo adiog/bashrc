@@ -1,0 +1,61 @@
+#!/bin/bash
+# Copyright 2016 Aleksander Gajewski <adiog@brainfuck.pl>
+#   created:  Sun 14 Aug 2016 04:00:21 PM CEST
+#   modified: Sun 14 Aug 2016 04:00:59 PM CEST
+
+# BASH_CLEANUP {{{
+BASH_CLEANUP_FILE=`mktemp`
+trap BASH_CLEANUP EXIT
+
+function BASH_CLEANUP() {
+  BASH_CLEANUP_FILE_REV=`mktemp`
+  tac $BASH_CLEANUP_FILE > $BASH_CLEANUP_FILE_REV
+  . $BASH_CLEANUP_FILE_REV
+  rm $BASH_CLEANUP_FILE $BASH_CLEANUP_FILE_REV
+}
+
+function BASH_FINALLY() {
+  echo "$*" >> $BASH_CLEANUP_FILE
+}
+
+function BASH_MKTEMP() {
+  BASH_TMP=`mktemp`
+  echo "rm $BASH_TMP" >> $BASH_CLEANUP_FILE
+  echo $BASH_TMP
+}
+
+function BASH_MKTEMP_DIR() {
+  BASH_TMP=`mktemp -d`
+  echo "rm -fr $BASH_TMP" >> $BASH_CLEANUP_FILE
+  echo $BASH_TMP
+}
+# }}}
+
+echo "Running Code Metrics report generation ..."
+
+INPUT_TXT=`BASH_MKTEMP`
+REPORT_XML_OUTPUT=cccc_report.xml
+REPORT_HTML_OUTPUT=cccc_report.html
+INPUT_DIR=${1:-.}
+
+echo "Removing old files ..."
+mv ${INPUT_TXT} *.db *.html *.xml
+
+echo "Collecting input source files ..."
+find ${INPUT_DIR} -name "*.c" \
+              -or -name "*.cc" \
+              -or -name "*.cpp" \
+              -or -name "*.h" \
+              -or -name "*.hpp" >> ${INPUT_TXT}
+
+echo "Running cccc ..."
+cat ${INPUT_TXT} | xargs cccc --outdir="." --xml_outfile=${REPORT_XML_OUTPUT} --html_outfile=${REPORT_HTML_OUTPUT}
+
+echo "Removing temporary files ..."
+rm -fr *.db anonymous.xml cccc_src.xml ${REPORT_XML_OUTPUT} ${INPUT_TXT}
+
+echo "... running Code Metrics Report generation done."
+
+chromium ${REPORT_HTML_OUTPUT}
+
+
