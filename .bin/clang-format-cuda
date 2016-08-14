@@ -1,0 +1,13 @@
+#!/bin/bash
+# Copyright 2015 Aleksander Gajewski <adiog@brainfuck.pl>
+#   created:  Fri 11 Dec 2015 05:55:24 PM CET
+#   modified: Sun 14 Aug 2016 04:04:21 PM CEST
+
+clang-format -i $*
+
+for file in $*; do
+  if [[ -e $file ]]; then
+    sed -e "s#\s*<\s*<\s*<\(.*\)>\s*>\s*>\s*#<<<\1>>>#" -i $file
+  fi
+done
+
