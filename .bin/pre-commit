@@ -1,9 +1,12 @@
 #!/bin/bash
 
+CLANG_FORMAT=clang-format
+PRECOMMIT_VERBOSE=TRUE
+
 function is_not_formatted() {
   file=$1
   tmp=`mktemp`
-  clang-format $file > $tmp
+  ${CLANG_FORMAT} $file > $tmp
   diff $file $tmp > /dev/null 
   code=$?
   rm $tmp
@@ -25,10 +28,13 @@ function starts_without_comment() {
   test -z "`sed -n -e "1{/\/\//p}" $1`"
 }
 
-
 MODIFIED_FILES_LIST=`git diff --staged --no-commit-id --name-only`
 FORMAT_EXTENSIONS="cc cpp h hpp"
 
+if [[ ! -d .git ]];
+then
+    cd $(git rev-parse --show-cdup)
+fi
 
 for file in ${MODIFIED_FILES_LIST}; 
 do
@@ -85,4 +91,7 @@ do
   done
 done
 
+cd - > /dev/null
+
 exit $exit_code
+
