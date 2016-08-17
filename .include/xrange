@@ -1,0 +1,43 @@
+// This file is a part of cpp-training project.
+// Copyright (c) 2016 Aleksander Gajewski <adiog@brainfuck.pl>.
+
+#ifndef __XRANGE__
+#define __XRANGE__
+
+template <typename T = int>
+class xrange {
+  public:
+    class xrange_iterator {
+      public:
+        xrange_iterator(T v, T step = static_cast<T>(1)) : v(v), step(step) {}
+        void operator++() { v += step; }
+        T operator*() const { return v; }
+        bool operator!=(const xrange_iterator &it) const {
+            return (step > static_cast<T>(0)) ? (this->v < it.v)
+                                              : (this->v > it.v);
+        }
+
+      private:
+        T v;
+        T step;
+    };
+    xrange(T rend)
+        : rbegin(static_cast<T>(0)),
+          rstep((rbegin < rend) ? static_cast<T>(1) : static_cast<T>(-1)),
+          rend(rend) {}
+    xrange(T rbegin, T rend)
+        : rbegin(rbegin),
+          rstep((rbegin < rend) ? static_cast<T>(1) : static_cast<T>(-1)),
+          rend(rend) {}
+    xrange(T rbegin, T rend, T rstep)
+        : rbegin(rbegin), rstep(rstep), rend(rend) {}
+    xrange_iterator begin() { return xrange_iterator(rbegin, rstep); }
+    xrange_iterator end() { return xrange_iterator(rend, rstep); }
+
+  private:
+    T rbegin;
+    T rend;
+    T rstep;
+};
+
+#endif  // __XRANGE__

@@ -1,0 +1,14 @@
+// This file is a part of cppstat project.
+// Copyright (c) 2016 Aleksander Gajewski <adiog@brainfuck.pl>.
+
+#ifndef __REPEAT__
+#define __REPEAT__
+
+template <typename Task, typename... Args>
+void repeat(unsigned long long int repetition, Task&& task, Args&&... args) {
+    while (repetition--) {
+        task(std::forward(args)...);
+    }
+}
+
+#endif  // __REPEAT__
