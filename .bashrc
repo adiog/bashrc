@@ -22,6 +22,13 @@ alias g++="g++ -std=c++14 -Wall -pedantic -fsanitize=address"
 alias cmake="cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
 
 
+function git-root() {
+    if [[ ! -d .git ]];
+    then
+        cd $(git rev-parse --show-cdup)
+    fi
+}
+
 function wanip() {
   dig +short myip.opendns.com @resolver1.opendns.com
 }
