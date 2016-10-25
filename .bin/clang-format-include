@@ -1,7 +1,7 @@
 #!/bin/bash
 # Copyright 2016 Aleksander Gajewski <adiog@brainfuck.pl>
 #   created:  Sun 14 Aug 2016 02:04:41 PM CEST
-#   modified: Sun 14 Aug 2016 03:27:11 PM CEST
+#   modified: Tue 30 Aug 2016 10:53:12 PM CEST
 
 # BASH_CLEANUP {{{
 BASH_CLEANUP_FILE=`mktemp`
@@ -31,19 +31,58 @@ function BASH_MKTEMP_DIR() {
 }
 # }}}
 
+CLANG_FORMAT=~/local/bin/clang-format
+
+function get-first-line-containing()
+{
+  FILE=$1
+  PATTERN=$2
+  cat -n $FILE | \
+    grep $PATTERN | \
+    sed -e "s/\s+/#/g" | \
+    cut -d'#' -f1 | \
+    head -n 1 | \
+    sed -e "s/\s*//g"
+}
+
+function get-last-line-containing() 
+{
+  FILE=$1
+  PATTERN=$2
+  cat -n $FILE | \
+    grep $PATTERN | \
+    sed -e "s/\s+/#/g" | \
+    cut -d'#' -f1 | \
+    tail -n 1 | \
+    sed -e "s/\s*//g"
+}
+
+function get-range()
+{
+  FILE=$1
+  PATTERN=$2
+  DELIMITER=$3
+  echo "$(get-first-line-containing $FILE $PATTERN)${DELIMITER}$(get-last-line-containing $FILE $PATTERN)"
+}
+
+function get-sed-range()
+{
+  FILE=$1
+  PATTERN=$2
+  get-range $FILE $PATTERN ","
+}
+
+function get-clang-format-range()
+{
+  FILE=$1
+  PATTERN=$2
+  get-range $FILE $PATTERN ":"
+}
+
 function merge_include()
 {
   FILE=$1
-
-  RANGE_FILE=`BASH_MKTEMP`
-  cat -n $FILE | \
-    grep "#include" | \
-    sed -e "s/\s//g" | \
-    cut -d'#' -f1 > $RANGE_FILE
-  RANGE_BEGIN=`cat $RANGE_FILE | head -n 1`
-  RANGE_END=`cat $RANGE_FILE | tail -n 1`
-  
-  RANGE="$RANGE_BEGIN,$RANGE_END"
+  RANGE=`get-sed-range $FILE "#include"`
   sed -e "${RANGE} {/^$/d}" -i $FILE
 }
 
@@ -51,7 +90,7 @@ function split_include()
 {
   FILE=$1
  
-  REGEX=`cat .clang-format | \
+  REGEX=`cat ~agajewski/.dotfiles/.clang-format | \
     grep Regex | \
     sed -e "s/\^//" -e "s/[^']*'\(.*\)'.*/\1/"`
   set -f
@@ -77,21 +116,57 @@ function split_include()
   done
 }
 
+function trick-main-include-start()
+{
+  FILE=$1
+  HEADER=${FILE/cpp/hpp}
+  HEADER=${HEADER/*\//}
+  sed -e "s/#include <\(.*\)${HEADER}>/#include \"\1${HEADER}\"/" -i $FILE 
+}
+
+function trick-main-include-end()
+{
+  FILE=$1
+  HEADER=${FILE/cpp/hpp}
+  HEADER=${HEADER/*\//}
+  sed -e "s/#include \"\(.*\)${HEADER}\"/#include <\1${HEADER}>/" -i $FILE 
+}
+
+
 function clang-format-include() 
 {
   FILE=$1
 
+  trick-main-include-start $FILE
+
+  #cat -n $FILE | head -n 70 && echo "##########################################"
   merge_include $FILE
-  clang-format -i $FILE
+  #cat -n $FILE | head -n 70 && echo "##########################################"
+  
+  RANGE=`get-clang-format-range $FILE "#include"`
+  $CLANG_FORMAT --lines ${RANGE} -i $FILE
   split_include $FILE
-  clang-format -style="{MaxEmptyLinesToKeep: 1}" -i $FILE
+
+  #cat -n $FILE | head -n 70 && echo "##########################################"
+  RANGE=`get-clang-format-range $FILE "#include"`
+  $CLANG_FORMAT --lines ${RANGE} -style="{MaxEmptyLinesToKeep: 1}" -i $FILE
     
+  #cat -n $FILE | head -n 70 && echo "##########################################"
   LINE_TO_ADD=`cat -n $FILE |\
     grep -e "#include" | \
     sed -e "s/\s//g" | \
     cut -d'#' -f1 | \
     tail -n 1`
   sed -e "$(($LINE_TO_ADD + 1))i\ " -i $FILE
+  #cat -n $FILE | head -n 70 && echo "##########################################"
 
-  clang-format -i $FILE
+  RANGE=`get-clang-format-range $FILE "#include"`
+  $CLANG_FORMAT --lines ${RANGE} -i $FILE
+  #cat -n $FILE | head -n 70 && echo "##########################################"
+  
+  trick-main-include-end $FILE
+  #cat -n $FILE | head -n 70 && echo "##########################################"
 }
+
+clang-format-include $*
+
