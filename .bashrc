@@ -29,6 +29,30 @@ function git-root() {
     fi
 }
 
+function cmake2clang() 
+{
+    if [[ $# == 0 ]]; 
+    then
+        CWD=`pwd`
+        CMAKE_DIR=${CWD}
+        TARGET_DIR=${CWD}
+    elif [[ $# == 1 ]];
+    then
+        CMAKE_DIR=$1
+        TARGTET_DIR=`pwd`
+    elif [[ $# == 2 ]];
+    then
+        CMAKE_DIR=$1
+        TARGET_DIR=$2
+    fi
+    TEMP=`mktemp -d`
+    cd $TEMP
+    cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ${CMAKE_DIR}
+    mv compile_commands.json ${TARGET_DIR}
+    cd -
+    rm -fr $TEMP
+}
+
 function wanip() {
   dig +short myip.opendns.com @resolver1.opendns.com
 }
@@ -45,6 +69,11 @@ function cdln() {
   READLINK=$(readlink $1)
   DIRNAME=$(dirname $READLINK)
   cd $DIRNAME
+}
+
+function mvln() {
+  mv $1 $2
+  ln -s $2 $1
 }
 
 function hi() {
@@ -87,7 +116,7 @@ function names() {
 }
 
 function doseol() {
-  file $1 | grep -q CRLF
+  grep -q "^M" 
 }
 
 function replace() {

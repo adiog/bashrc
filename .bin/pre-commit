@@ -21,7 +21,7 @@ function exceeds_column_limit() {
 }
 
 function has_dos_eols() {
-  file $1 | grep -q CRLF
+  grep -q "^M"
 }
 
 function starts_without_comment() {
