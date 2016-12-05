@@ -3,7 +3,8 @@
 CLANG_FORMAT=clang-format
 PRECOMMIT_VERBOSE=TRUE
 
-function is_not_formatted() {
+function is_not_formatted()
+{
   file=$1
   tmp=`mktemp`
   ${CLANG_FORMAT} $file > $tmp
@@ -16,15 +17,18 @@ function is_not_formatted() {
   fi
 }
 
-function exceeds_column_limit() {
+function exceeds_column_limit()
+{
   grep -q -E "^.{${COLUMNLIMIT:-120}}.+" $*
 }
 
-function has_dos_eols() {
-  grep -q "^M"
+function has_dos_eols()
+{
+  grep -q ""
 }
 
-function starts_without_comment() {
+function starts_without_comment()
+{
   test -z "`sed -n -e "1{/\/\//p}" $1`"
 }
 
@@ -36,62 +40,70 @@ then
     cd $(git rev-parse --show-cdup)
 fi
 
+echo "Running pre-commit..."
+echo $MODIFIED_FILES_LIST
+
 for file in ${MODIFIED_FILES_LIST}; 
 do
   for ext in ${FORMAT_EXTENSIONS}; 
   do
     if [[ ${file} = *.$ext ]]; 
     then 
-
-      if starts_without_comment ${file};
+      echo "Checking $file..."
+      if [[ -e ${file} ]];
       then
-        echo -e "File ${file}\e[31m does not include trailing copyright\e[39m."
-        exit_code=1
-      else
-        if [[ -n "$PRECOMMIT_VERBOSE" ]];
+        if starts_without_comment ${file};
         then
-          echo -e "File ${file} starts with a comment."
+          echo -e "File ${file}\e[31m does not include trailing copyright\e[39m."
+          exit_code=1
+        else
+          if [[ -n "$PRECOMMIT_VERBOSE" ]];
+          then
+            echo -e "File ${file} starts with a comment."
+          fi
+        fi
+
+        if is_not_formatted ${file}; 
+        then
+          echo -e "File ${file}\e[31m was not formatted\e[39m correctly."
+          exit_code=1
+        else
+          if [[ -n "$PRECOMMIT_VERBOSE" ]];
+          then
+            echo "File ${file} was formatted correctly."
+          fi
+        fi
+
+        if has_dos_eols ${file}; 
+        then
+          echo -e "File ${file}\e[31m has windows EOLs\e[39m."
+          exit_code=1
+        else
+          if [[ -n "$PRECOMMIT_VERBOSE" ]];
+          then
+            echo "File ${file} has correct unix EOLs."
+          fi
+        fi
+
+        if exceeds_column_limit ${file}; 
+        then
+          echo -e "File ${file}\e[31m has lines longer than ${COLUMNLIMIT:-120}\e[39m."
+          exit_code=1
+        else
+          if [[ -n "$PRECOMMIT_VERBOSE" ]];
+          then
+            echo "File ${file} has lines within ${COLUMNLIMIT:-120} limit."
+          fi
         fi
       fi
-
-      if is_not_formatted ${file}; 
-      then
-        echo -e "File ${file}\e[31m was not formatted\e[39m correctly."
-        exit_code=1
-      else
-        if [[ -n "$PRECOMMIT_VERBOSE" ]];
-        then
-          echo "File ${file} was formatted correctly."
-        fi
-      fi
-
-      if has_dos_eols ${file}; 
-      then
-        echo -e "File ${file}\e[31m has windows EOLs\e[39m."
-        exit_code=1
-      else
-        if [[ -n "$PRECOMMIT_VERBOSE" ]];
-        then
-          echo "File ${file} has correct unix EOLs."
-        fi
-      fi
-
-      if exceeds_column_limit ${file}; 
-      then
-        echo -e "File ${file}\e[31m has lines longer than ${COLUMNLIMIT:-120}\e[39m."
-        exit_code=1
-      else
-        if [[ -n "$PRECOMMIT_VERBOSE" ]];
-        then
-          echo "File ${file} has lines within ${COLUMNLIMIT:-120} limit."
-        fi
-      fi
-
     fi
   done
 done
 
-cd - > /dev/null
+if [[ ! -d .git ]];
+then
+  cd - > /dev/null
+fi
 
 exit $exit_code
 

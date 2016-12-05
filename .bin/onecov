@@ -1,0 +1,19 @@
+#!/bin/bash
+
+CLASS=${1/.cpp/}
+if [[ -z "$CLASS" ]];
+then
+  echo "Missing argument"
+fi
+find . -follow -name "${CLASS}.gc*" -exec cp {} . \;
+find .         -name "${CLASS}.gc*" -exec gcov {} \;
+lcov -c -d . -o cov.info
+OUTPUT=gcov-html
+if [[ -d "$OUTPUT" ]];
+then
+  echo "Removing old report"
+  rm -fr $OUTPUT
+fi
+genhtml cov.info --output-directory $OUTPUT
+rm -f *.gcno *.gcda *.gcov cov.info
+

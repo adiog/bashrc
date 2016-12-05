@@ -55,14 +55,20 @@ IncludeCategories:
     Priority:        2
   - Regex:           '^<boost.*>'
     Priority:        3
-  - Regex:           '^<[A-Z].*>'
-    Priority:        4
-  - Regex:           '^<[a-z].*((.h)|(.hpp))'
-    Priority:        5
-  - Regex:           '^gtest/.*'
-    Priority:        8
+  - Regex:           '^<kit/.*>'
+    Priority:        10
+  - Regex:           '^<.*.pb.h>'
+    Priority:        11
+  - Regex:           '^<[a-z].*((.h)|(.hpp))>'
+    Priority:        20
+  - Regex:           '^<[A-Z].*((.h)|(.hpp))>'
+    Priority:        20
+  - Regex:           '^<gtest/.*>'
+    Priority:        30
+  - Regex:           '^<gmock/.*>'
+    Priority:        30
   - Regex:           '.*'
-    Priority:        9
+    Priority:        100
 IndentCaseLabels: true
 IndentWidth:     4
 IndentWrappedFunctionNames: false

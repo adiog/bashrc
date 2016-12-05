@@ -95,10 +95,11 @@ cat ${COPYRIGHT_HEADER_TXT} > ${MOCK}
 
 # concatenate default includes
 (
+echo ""
 echo "#pragma once"
 echo ""
 echo "#include <${INCLUDE_HEADER}>"
-echo "#include <gtest/gmock.hpp>"
+echo "#include <gmock/gmock.h>"
 echo ""
 echo ""
 ) >> ${MOCK}
