@@ -8,9 +8,10 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-"Plugin 'majutsushi/tagbar'
-"Plugin 'Valloric/YouCompleteMe'
-"Plugin 'rdnetto/YCM-Generator'
+Plugin 'majutsushi/tagbar'
+Plugin 'Valloric/YouCompleteMe'
+" cd ~/.vim/bundle/YouCompleteMe && git submodule update --init --recursive && ./install.sh --clang-completer --system-libclang --system-boost
+""Plugin 'rdnetto/YCM-Generator'
 
 Plugin 'leafgarland/typescript-vim'
 Plugin 'NLKNguyen/papercolor-theme'
@@ -27,8 +28,9 @@ Plugin 'google/vim-searchindex'
 Plugin 'godlygeek/tabular'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'airblade/vim-rooter'
+Plugin 'airblade/vim-gitgutter'
 Plugin 'vim-scripts/a.vim'
-
+Plugin 'pboettch/vim-cmake-syntax'
 Plugin 'adiog/vim-adiog'
 
 "Plugin 'chrisbra/NrrwRgn'

@@ -18,7 +18,7 @@ alias grep="grep --color"
 alias hg="hg -v"
 alias vim="vim -p"
 alias x="chmod +x"
-alias g++="g++ -std=c++14 -Wall -pedantic -fsanitize=address"
+#alias g++="g++ -std=c++14 -Wall -pedantic -fsanitize=address"
 alias cmake="cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
 
 
