@@ -3,7 +3,7 @@ export EDITOR=vim
 export PATH=/opt/bin:$PATH
 
 shopt -s globstar
-set -o vi
+#set -o vi
 
 xset -b > /dev/null 2> /dev/null
 xset b off

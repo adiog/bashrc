@@ -1,0 +1,39 @@
+# modify setxkbmap -layout pl -variant dvp:
+#
+# Use CapsLock as modifier:
+#
+#    key -> map
+#   7890    789+  
+#   uiop    456-
+#   jkl;    123*
+#   m,./    0,./
+#
+# Get current mapping: 
+#   $ xmodmap -pke
+#
+# Each keysym column in the table corresponds to a particular combination of modifier keys:
+#   keycode __ = Key Shift+Key *mode_switch+Key* *mode_switch+Shift+Key* AltGr+Key AltGr+Shift+Key
+# Here both *mode_switch+Key* and *mode_switch+Shift+Key* are used.
+
+keycode  16 = asterisk 0 7 7
+keycode  17 = parenright 2 8 8 onehalf NoSymbol onehalf
+keycode  18 = plus 4 9 9 dead_grave NoSymbol dead_grave
+keycode  19 = bracketright 6 plus plus
+
+keycode  30 = g G 4 4 
+keycode  31 = c C 5 5 cacute Cacute cacute Cacute
+keycode  32 = r R 6 6 registered trademark registered trademark
+keycode  33 = l L minus minus lstroke Lstroke lstroke Lstroke
+
+keycode  44 = h H 1 1 dead_acute NoSymbol dead_acute
+keycode  45 = t T 2 2 thorn THORN thorn THORN
+keycode  46 = n N 3 3 nacute Nacute nacute Nacute
+keycode  47 = s S asterisk asterisk sacute Sacute sacute Sacute
+
+keycode  58 = m M 0 0
+keycode  59 = w W comma comma
+keycode  60 = v V period period zacute Zacute zacute Zacute
+keycode  61 = z Z slash slash zabovedot Zabovedot zabovedot Zabovedot
+
+keycode  66 = Mode_switch Mode_switch Mode_switch Mode_switch
+
