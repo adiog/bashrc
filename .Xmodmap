@@ -1,19 +1,19 @@
-# modify setxkbmap -layout pl -variant dvp:
-#
-# Use CapsLock as modifier:
-#
-#    key -> map
-#   7890    789+  
-#   uiop    456-
-#   jkl;    123*
-#   m,./    0,./
-#
-# Get current mapping: 
-#   $ xmodmap -pke
-#
-# Each keysym column in the table corresponds to a particular combination of modifier keys:
-#   keycode __ = Key Shift+Key *mode_switch+Key* *mode_switch+Shift+Key* AltGr+Key AltGr+Shift+Key
-# Here both *mode_switch+Key* and *mode_switch+Shift+Key* are used.
+! modify setxkbmap -layout pl -variant dvp:
+!
+! Use CapsLock as modifier:
+!
+!    key -> map
+!   7890    789+
+!   uiop    456-
+!   jkl;    123*
+!   m,./    0,./
+!
+! Get current mapping:
+!   $ xmodmap -pke
+!
+! Each keysym column in the table corresponds to a particular combination of modifier keys:
+!   keycode __ = Key Shift+Key *mode_switch+Key* *mode_switch+Shift+Key* AltGr+Key AltGr+Shift+Key
+! Here both *mode_switch+Key* and *mode_switch+Shift+Key* are used.
 
 keycode  16 = asterisk 0 7 7
 keycode  17 = parenright 2 8 8 onehalf NoSymbol onehalf
