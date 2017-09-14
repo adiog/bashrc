@@ -23,12 +23,13 @@ alias cmake="cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
 
 alias mc=". /usr/share/mc/bin/mc-wrapper.sh"
 
-function git-root() {
+function cd-git-root() {
     if [[ ! -d .git ]];
     then
         cd $(git rev-parse --show-cdup)
     fi
 }
+export -f cd-git-root
 
 function cmake2clang() 
 {
@@ -75,6 +76,11 @@ function cdln() {
 function mvln() {
   mv $1 $2
   ln -s $2 $1
+}
+
+function rename()
+{
+  mv $1 $(dirname $1)/$2
 }
 
 function hi() {
@@ -164,6 +170,34 @@ function gof() {
   cd -
 }
 
+function video_trim()
+{
+  INPUT=$1
+  OUTPUT=$2
+  START=$3
+  LENGTH=$4
+  if [[ $# == 5 ]];
+  then
+    ffmpeg -i $INPUT -vcodec copy -acodec copy -ss $START -t $LENGTH $OUTPUT
+  else
+    echo "Usage: "
+    echo "$ video_trim INPUT OUTPUT START(HH:MM:SS) LENGTH(HH:MM:SS)"
+  fi
+}
+
+function video_join()
+{
+  if [[ $# == 0 || $# == 1 ]];
+  then
+    echo "Usage: "
+    echo "$ video_join OUTPUT INPUTS..."
+  else
+    OUTPUT=$1
+    shift
+    INPUTS=$*
+    mencoder -ovc copy -oac copy $INPUTS -o $OUTPUTS
+  fi
+}
 
 MARKS=$HOME/.dotfiles/.marks
 if [ -e "$MARKS" ]; then

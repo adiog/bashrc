@@ -13,7 +13,7 @@ font pango:DejaVu Sans Mono 7
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec "gnome-terminal"
+bindsym $mod+Return exec "gnome-terminal.real"
 
 # start a file explorer
 bindsym $mod+Shift+Return exec "nautilus"
@@ -23,7 +23,7 @@ bindsym Mod1+F4 kill
 bindsym $mod+Shift+Delete exec "xkill"
 
 # start gmrun (a program launcher)
-bindsym $mod+r exec "gmrun"
+bindsym $mod+r exec "bash -ci gmrun"
 for_window [class="Gmrun"] floating enable
 
 # change focus
@@ -90,8 +90,7 @@ bindsym $mod+F7 workspace 7
 bindsym $mod+F8 workspace 8
 bindsym $mod+F9 workspace 9
 bindsym $mod+F10 workspace 10
-bindsym $mod+F11 workspace 11
-bindsym $mod+F12 workspace 12
+bindsym $mod+F11 exec /home/adiog/.i3/switch_touchpad.sh
 
 # switch to workspace (second row)
 bindsym $mod+ampersand workspace "X1"
@@ -116,8 +115,6 @@ bindsym $mod+Ctrl+F7 move container to workspace 7; workspace 7
 bindsym $mod+Ctrl+F8 move container to workspace 8; workspace 8
 bindsym $mod+Ctrl+F9 move container to workspace 9; workspace 9
 bindsym $mod+Ctrl+F10 move container to workspaces 10; workspace 10
-bindsym $mod+Ctrl+F11 move container to workspacel 11; workspace 11
-bindsym $mod+Ctrl+F12 move container to workspacel 12; workspace 12
 
 # move focused container to workspace (second row)
 bindsym $mod+Shift+F1 move container to workspace "X1"; workspace "X1"
@@ -132,30 +129,30 @@ bindsym $mod+Shift+F9 move container to workspace "X9"; workspace "X9"
 bindsym $mod+Shift+F10 move container to workspace "X10"; workspace "X10"
 
 # define output for workspace
-workspace 1 output LVDS1
-workspace 2 output LVDS1
-workspace 3 output LVDS1
-workspace 4 output LVDS1
-workspace 5 output LVDS1
-workspace 6 output LVDS1
-workspace 7 output LVDS1
-workspace 8 output LVDS1
-workspace 9 output LVDS1
-workspace 10 output LVDS1
-workspace 11 output LVDS1
-workspace 12 output LVDS1
+workspace 1 output eDP1
+workspace 2 output eDP1
+workspace 3 output eDP1
+workspace 4 output eDP1
+workspace 5 output eDP1
+workspace 6 output eDP1
+workspace 7 output eDP1
+workspace 8 output eDP1
+workspace 9 output eDP1
+workspace 10 output eDP1
+workspace 11 output eDP1
+workspace 12 output eDP1
 
 # define output for workspace (second row)
-workspace "X1" output VGA1
-workspace "X2" output VGA1
-workspace "X3" output VGA1
-workspace "X4" output VGA1
-workspace "X5" output VGA1
-workspace "X6" output VGA1
-workspace "X7" output VGA1
-workspace "X8" output VGA1
-workspace "X9" output VGA1
-workspace "X10" output VGA1
+workspace "X1" output eDP1
+workspace "X2" output eDP1
+workspace "X3" output eDP1
+workspace "X4" output eDP1
+workspace "X5" output HDMI1
+workspace "X6" output HDMI1
+workspace "X7" output HDMI1
+workspace "X8" output HDMI1
+workspace "X9" output HDMI1
+workspace "X10" output HDMI1
 
 # named workspaces
 bindsym XF86WebCam workspace Extra
@@ -177,7 +174,7 @@ bindsym XF86Calculator scratchpad show
 bindsym $mod+XF86Calculator exec "gnome-terminal -e vim && i3-msg 'move scratchpad; scratchpad show'"
 
 # lock & exit
-bindsym $mod+XF86Sleep exec "i3lock -n -i /home/adiog/Config/backgrounds/speaker.png"
+bindsym $mod+Shift+L exec "i3lock -n -i /home/adiog/.media/backgrounds/abstract-lock-screen.jpg"
 bindsym $mod+Shift+XF86Sleep exec /opt/bin/i3-exit
 for_window [class="I3-exit" instance="i3-exit"] floating enable
 
@@ -185,9 +182,10 @@ for_window [class="I3-exit" instance="i3-exit"] floating enable
 bindsym $mod+y exec "kill `pidof gkrellm` || gkrellm"
 for_window [title="gkrellm"] floating enable
 bindsym $mod+f exec "kill `pidof htop` || gnome-terminal -e htop && && i3-msg 'floating enable'"
+bindsym $mod+v exec "/home/adiog/.dotfiles/.bin/qsarea.sh"
 
 # quickswitch
-bindsym $mod+Tab exec "/home/adiog/Config/i3/quickswitch.py"
+bindsym $mod+Tab exec "quickswitch.py"
 
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+p restart
@@ -209,25 +207,43 @@ bindsym XF86AudioPrev exec audtool --playlist-reverse
 for_window [class="file_progress"] floating enable
 
 # i3slime: custom commands
-bindsym $mod+Shift+r exec ~/.i3slime/gnome.sh
-bindsym $mod+x ~/.i3slime/gettext.sh
-bindsym $mod+v ~/.i3slime/puttext.sh
+#bindsym $mod+Shift+r exec ~/.i3slime/gnome.sh
+#bindsym $mod+x ~/.i3slime/gettext.sh
+#bindsym $mod+v ~/.i3slime/puttext.sh
 
 # copy from clipboard
-bindsym $mod+Shift+v exec "~/.quicksave.py"
+#bindsym $mod+Shift+v exec "~/.quicksave.py"
 #"xsel -b >> ~/.quicksave/db.txt"; exec "echo >> ~/.quicksave/db.txt"
 
 # common startup
-exec --no-startup-id exec "feh --bg-center ~/dotfiles/pics/Terraform-green.jpg"
-exec --no-startup-id i3-msg 'workspace 1; exec /opt/firefox/firefox'
+exec --no-startup-id feh --bg-center /home/adiog/.media/backgrounds/abstract-lock-screen.jpg
+exec --no-startup-id i3-msg 'workspace 1; exec firefox'
 exec --no-startup-id i3-msg 'workspace 2; exec nautilus'
 exec --no-startup-id i3-msg 'exec "nm-applet &"'
+exec --no-startup-id i3-msg 'exec /home/adiog/.xinitrc &"'
+bindsym $mod+Shift+y exit
 
 # status bar
 bar {
-    status_command i3status
+    status_command    python3 ~/.dotfiles/i3pystatus/i3adiog.py
+#    status_command    i3bar -t --bar_id 0
     position          bottom
     workspace_buttons yes
-    # output            LVDS1
+    # output            eDP1
 }
+
+# Sreen brightness controls
+bindsym XF86MonBrightnessUp exec xbacklight -inc 5 # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 5 # decrease screen brightness
+
+bindsym $mod+Ctrl+Shift+Down exec "xrandr --output eDP1 --mode 1920x1080 --output HDMI1 --off"
+bindsym $mod+Ctrl+Shift+Left exec "xrandr --output eDP1 --off --output HDMI1 --mode 1920x1080"
+bindsym $mod+Ctrl+Shift+Right exec "xrandr --output eDP1 --off --output HDMI1 --mode 3840x2160"
+
+bindsym $mod+Ctrl+Shift+Next exec "xrandr --output eDP1 --mode 1920x1080 --output HDMI1 --mode 2560x1440 --right-of eDP1"
+bindsym $mod+Ctrl+Shift+Up exec "xrandr --output eDP1 --mode 1920x1080 --output HDMI1 --mode 3840x2160 --above eDP1"
+bindsym $mod+Ctrl+Shift+Prior exec "xrandr --output eDP1 --mode 1920x1080 --output HDMI1 --mode 2560x1440 --left-of eDP1"
+
+bindsym $mod+Insert exec i3-input -F "workspace %s" -P "Switch to workspace: "
+bindsym $mod+Shift+Insert exec i3-input -F "move container to workspace %s" -P "Move to workspace: "
 

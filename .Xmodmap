@@ -37,3 +37,5 @@ keycode  61 = z Z slash slash zabovedot Zabovedot zabovedot Zabovedot
 
 keycode  66 = Mode_switch Mode_switch Mode_switch Mode_switch
 
+keycode 118 = NoSymbol
+
