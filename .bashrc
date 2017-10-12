@@ -199,6 +199,12 @@ function video_join()
   fi
 }
 
+function jupi()
+{
+  mkdir -p $HOME/Jupyter
+  sudo docker run -p 8888:8888 -it -v $HOME/Jupyter:/home/jovyan jupyter/tensorflow-notebook jupyter notebook
+}
+
 MARKS=$HOME/.dotfiles/.marks
 if [ -e "$MARKS" ]; then
   . $MARKS

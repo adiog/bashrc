@@ -1,7 +1,5 @@
 #!/bin/bash
 # Copyright 2016 Aleksander Gajewski <adiog@brainfuck.pl>
-#   created:  Sun 14 Aug 2016 02:04:41 PM CEST
-#   modified: Tue 25 Oct 2016 02:09:57 PM CEST
 
 # BASH_CLEANUP {{{
 BASH_CLEANUP_FILE=`mktemp`
@@ -88,7 +86,7 @@ function split_include()
 {
   FILE=$1
  
-  REGEX=`cat ~agajewski/.dotfiles/.clang-format | \
+  REGEX=`cat ${HOME}/.dotfiles/.clang-format | \
     grep Regex | \
     sed -e "s/\^//" -e "s/[^']*'\(.*\)'.*/\1/"`
   set -f
