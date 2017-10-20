@@ -67,6 +67,11 @@ function vman() {
   vim -c "Man $1 $2" -c 'silent only'
 }
 
+function cdp() {
+	mkdir -p $1
+	cd $1
+}
+
 function cdln() {
   READLINK=$(readlink $1)
   DIRNAME=$(dirname $READLINK)

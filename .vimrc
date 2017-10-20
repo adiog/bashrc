@@ -32,6 +32,7 @@ Plugin 'airblade/vim-rooter'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'vim-scripts/a.vim'
 Plugin 'pboettch/vim-cmake-syntax'
+Plugin 'fidian/hexmode'
 Plugin 'adiog/vim-adiog'
 
 "Plugin 'chrisbra/NrrwRgn'
