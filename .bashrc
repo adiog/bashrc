@@ -210,6 +210,11 @@ if [ -e "$MARKS" ]; then
   . $MARKS
 fi
 
+VENVS=$HOME/.dotfiles/.venvs
+if [ -e "$VENVS" ]; then
+  . $VENVS
+fi
+
 TO_PATH=$HOME/.dotfiles/.bin
 if [ -d "$TO_PATH" ] ; then
   export PATH=$TO_PATH:$PATH

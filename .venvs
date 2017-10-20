@@ -1,0 +1,35 @@
+#!/bin/bash
+# Copyright 2017 Aleksander Gajewski <adiog@brainfuck.pl>
+
+export VENV_PYTHON=python3.6
+export VENV_ENVS=${HOME}/.venvs
+
+mkdir -p ${VENV_ENVS}
+
+function list_venvs() {
+  ls -1 ${VENV_ENVS}
+}
+
+function _venv_comp {
+  local curw
+  COMPREPLY=()
+  curw=${COMP_WORDS[COMP_CWORD]}
+  if [[ $COMP_CWORD == 1 ]];
+  then
+      COMPREPLY=($(compgen -W '`list_venvs`' -- $curw))
+  else
+			# not used			
+			complete_for_venv=${COMP_WORDS[COMP_CWORD-1]}
+      prev=""
+      words="${COMP_WORDS[@]:2}"
+      cword=1
+
+			# get all completions
+      COMPREPLY=( $( cur="$cur"; prev="$prev"; words=$words; cword="$cword"; compgen -abcdefgjksuv "$curw" ) )
+  fi
+  return 0
+}
+
+shopt -s progcomp
+complete -F _venv_comp venv
+

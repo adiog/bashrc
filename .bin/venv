@@ -1,0 +1,22 @@
+#!/bin/bash
+# Copyright 2017 Aleksander Gajewski <adiog@brainfuck.pl>
+
+
+if [[ -z "$1" ]];
+then 
+    echo "usage: [.] venv virtualenv_id [command [args...]]"
+    exit 1
+fi
+
+VIRTUALENV_ID=$1
+shift 1
+VENV_PATH=${VENV_ENVS}/${VIRTUALENV_ID}
+
+if [[ ! -d ${VENV_PATH} ]];
+then
+    virtualenv -p ${VENV_PYTHON} ${VENV_PATH}
+fi
+
+. ${VENV_PATH}/bin/activate
+$@
+
