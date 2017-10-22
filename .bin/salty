@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import hashlib
+import subprocess
+import sys
+import os
+
+from pathlib import Path
+
+from PyQt5.QtWidgets import QApplication, QInputDialog
+
+
+class MutableWrapper(object):
+    def __init__(self, value):
+        self.value = value
+
+    def set(self, value):
+        self.value = value
+
+    def get(self):
+        return self.value
+
+
+def qt_input_accepted(dialog, output):
+    value = dialog.textValue()
+    if value:
+        output.set(value)
+
+
+def qt_input_rejected(dialog, output):
+    pass
+
+
+def qt_input(prompt, default_value, is_password):
+    result = MutableWrapper(default_value)
+    app = QApplication([])
+    dialog = QInputDialog()
+    dialog.setLabelText(prompt)
+    if is_password:
+        dialog.setTextEchoMode(2)
+    dialog.accepted.connect(lambda: qt_input_accepted(dialog, result))
+    dialog.rejected.connect(lambda: qt_input_rejected(dialog, result))
+    dialog.show()
+    app.exec()
+    return result.get()
+
+
+def credentials_prompt_gui():
+    return qt_input('Salty: ', '', is_password=True)
+
+
+def main():
+    salty_path = os.path.expanduser("~") + '/.salty'
+    Path(salty_path).touch()
+    with open(salty_path, 'r') as salty_file:
+        salt = salty_file.read()
+    sugar = credentials_prompt_gui()
+    print(sugar)
+    salt = hashlib.sha224(sugar.encode() + salt.encode()).hexdigest()
+    print(salt)
+    subprocess.check_output(f'echo "{salt}" | xsel --clipboard --input', shell=True)
+    if len(sys.argv) == 2 and sys.argv[1] == '--init':
+        with open(salty_path, 'w') as salty_file:
+            salty_file.write(salt)
+
+
+if __name__ == '__main__':
+    main()
+
