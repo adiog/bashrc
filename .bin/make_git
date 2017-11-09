@@ -1,7 +1,7 @@
 #!/bin/bash
 # Copyright 2017 Aleksander Gajewski <adiog@brainfuck.pl>
 #   created:  czw, 9 lis 2017, 01:59:58
-#   modified: czw, 9 lis 2017, 02:48:46
+#   modified: czw, 9 lis 2017, 03:30:34
 
 # BASH_CLEANUP {{{
 BASH_CLEANUP_FILE=`mktemp`
@@ -31,6 +31,11 @@ function BASH_MKTEMP_DIR() {
 }
 # }}}
 
+function verbose()
+{
+  [[ -n "$VERBOSE" ]] && read
+}
+
 base=$1
 tars=$2
 
@@ -46,22 +51,21 @@ fi
 
 TEMP=`BASH_MKTEMP_DIR`
 
-for tarpath in `ls -1 $tars/* | sort`; do
+for tarpath in `ls -v -1 $tars/*`; do
   tarreal=$(realpath $tarpath)
   tarfile=$(basename $tarpath)
   tarname=${tarfile/.tar.gz/}
   version=${tarname/${base}-/}
   
-  echo $tarpath
-  echo $tarname
-  echo $version
-  read
+  echo "MAKE_GIT: adding $version"
+  verbose
 
   untargz $tarreal $TEMP
-  (cd $target_git_repo && git rm -fr *)
+  (cd $target_git_repo && git rm -fr * > /dev/null)
   mv $TEMP/$tarname/* $target_git_repo/
   (cd $target_git_repo && git add . && git commit -m "$version" && git tag "$version")
-  read
+  echo "MAKE_GIT: added $version"
+  verbose
   
   rm -fr $TEMP/*
 done

@@ -9,8 +9,8 @@ if [[ -e $ARCHIVE ]]; then
 	FORCE=$1
 	if [[ $FORCE != "--force" ]]; then
 		echo "You may override something. Are you sure you know what you are doing?"
-	  return
-	fi
+	  exit 1
+  fi
   shift 1
 fi
 FILES=$*	

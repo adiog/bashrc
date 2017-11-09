@@ -3,11 +3,15 @@
 ARCHIVE=$(realpath $1)
 TARGET=${2:-${1/.tar.gz/}}
 if [[ $TARGET != "." ]]; then
-	if [[ -e $TARGET || -d $TARGET ]]; then
+	if [[ -f $TARGET ]]; then
 		echo "You may override something. Are you sure you know what you are doing?"
-	  return
+	  exit 1
 	fi
+  if ! is_empty $TARGET; then
+		echo "You may override something. Are you sure you know what you are doing?"
+	  exit 1
+  fi
 	mkdir -p $TARGET
 fi	
-(cd $TARGET && tar -xkzvf $ARCHIVE)
+(cd $TARGET && tar -xkzvf $ARCHIVE > /dev/null)
 
