@@ -1,7 +1,7 @@
 #!/bin/bash
 # Copyright 2017 Aleksander Gajewski <adiog@brainfuck.pl>
 #   created:  czw, 9 lis 2017, 01:59:58
-#   modified: czw, 9 lis 2017, 03:30:34
+#   modified: czw, 9 lis 2017, 03:36:30
 
 # BASH_CLEANUP {{{
 BASH_CLEANUP_FILE=`mktemp`
@@ -63,7 +63,7 @@ for tarpath in `ls -v -1 $tars/*`; do
   untargz $tarreal $TEMP
   (cd $target_git_repo && git rm -fr * > /dev/null)
   mv $TEMP/$tarname/* $target_git_repo/
-  (cd $target_git_repo && git add . && git commit -m "$version" && git tag "$version")
+  (cd $target_git_repo && git add . && git commit -m "$version" && git tag -a "$version" -m "$version")
   echo "MAKE_GIT: added $version"
   verbose
   
