@@ -59,6 +59,10 @@ function wanip() {
   dig +short myip.opendns.com @resolver1.opendns.com
 }
 
+function lanip() {
+  ip route get 8.8.8.8 | awk '{print $NF; exit}'
+}
+
 function vv() {
   $@ | vim -R -
 }
@@ -68,8 +72,8 @@ function vman() {
 }
 
 function cdp() {
-	mkdir -p $1
-	cd $1
+  mkdir -p $1
+  cd $1
 }
 
 function cdln() {
@@ -229,6 +233,7 @@ TO_PYTHONPATH=$HOME/.dotfiles/.pypath
 if [[ -d "${TO_PYTHONPATH}" ]];
 then
   export PYTHONPATH=${TO_PYTHONPATH}:$PYTHONPATH
+  export PATH=$PATH:${TO_PYTHONPATH}
 fi
 
 

@@ -1,0 +1,30 @@
+#!/usr/bin/python3
+
+# This file is a part of quicksave project.
+# Copyright (c) 2017 Aleksander Gajewski <adiog@quicksave.io>.
+
+import sys
+import requests
+from bs4 import BeautifulSoup
+
+
+def picker(url, selector):
+    response = requests.get(url)
+    html_content = response.text
+    soup_document = BeautifulSoup(html_content, 'html.parser')
+    return soup_document.select(selector)
+
+def extract(url, selector, attrs):
+    for node in picker(url, selector):
+        if attrs:
+            for attr in attrs:
+                if attr == 'text':
+                    print(node.text)
+                else:
+                    print(node[attr])
+        else:
+            print(node)
+
+if __name__ == '__main__':
+    extract(sys.argv[1], sys.argv[2], sys.argv[3:])
+        

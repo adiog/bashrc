@@ -1,0 +1,68 @@
+#!/bin/bash
+# Copyright 2017 Aleksander Gajewski <adiog@brainfuck.pl>
+#   created:  czw, 9 lis 2017, 01:59:58
+#   modified: czw, 9 lis 2017, 02:48:46
+
+# BASH_CLEANUP {{{
+BASH_CLEANUP_FILE=`mktemp`
+trap BASH_CLEANUP EXIT
+
+function BASH_CLEANUP() {
+  BASH_CLEANUP_FILE_REV=`mktemp`
+  tac $BASH_CLEANUP_FILE > $BASH_CLEANUP_FILE_REV
+  . $BASH_CLEANUP_FILE_REV
+  rm $BASH_CLEANUP_FILE $BASH_CLEANUP_FILE_REV
+}
+
+function BASH_FINALLY() {
+  echo "$*" >> $BASH_CLEANUP_FILE
+}
+
+function BASH_MKTEMP() {
+  BASH_TMP=`mktemp`
+  echo "rm $BASH_TMP" >> $BASH_CLEANUP_FILE
+  echo $BASH_TMP
+}
+
+function BASH_MKTEMP_DIR() {
+  BASH_TMP=`mktemp -d`
+  echo "rm -fr $BASH_TMP" >> $BASH_CLEANUP_FILE
+  echo $BASH_TMP
+}
+# }}}
+
+base=$1
+tars=$2
+
+target_git_repo=$base
+
+if [[ ! -d $target_git_repo ]]; then
+  (
+  mkdir -p $target_git_repo
+  cd $target_git_repo
+  git init
+  )
+fi
+
+TEMP=`BASH_MKTEMP_DIR`
+
+for tarpath in `ls -1 $tars/* | sort`; do
+  tarreal=$(realpath $tarpath)
+  tarfile=$(basename $tarpath)
+  tarname=${tarfile/.tar.gz/}
+  version=${tarname/${base}-/}
+  
+  echo $tarpath
+  echo $tarname
+  echo $version
+  read
+
+  untargz $tarreal $TEMP
+  (cd $target_git_repo && git rm -fr *)
+  mv $TEMP/$tarname/* $target_git_repo/
+  (cd $target_git_repo && git add . && git commit -m "$version" && git tag "$version")
+  read
+  
+  rm -fr $TEMP/*
+done
+

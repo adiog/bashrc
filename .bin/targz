@@ -1,0 +1,18 @@
+#!/bin/bash
+
+ARCHIVE=$1
+shift 1
+if [[ ! $ARCHIVE =~ .tar.gz$ ]]; then
+	ARCHIVE=$ARCHIVE.tar.gz
+fi
+if [[ -e $ARCHIVE ]]; then
+	FORCE=$1
+	if [[ $FORCE != "--force" ]]; then
+		echo "You may override something. Are you sure you know what you are doing?"
+	  return
+	fi
+  shift 1
+fi
+FILES=$*	
+tar -czvf $ARCHIVE $FILES
+
