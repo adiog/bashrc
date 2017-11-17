@@ -1,4 +1,5 @@
 export LANG=en_US.UTF-8
+export LC_TIME=en_US.UTF-8
 export EDITOR=vim
 export PATH=/opt/bin:$PATH
 
@@ -205,6 +206,20 @@ function video_join()
     shift
     INPUTS=$*
     mencoder -ovc copy -oac copy $INPUTS -o $OUTPUTS
+  fi
+}
+
+function gif_join()
+{
+  if [[ $# == 0 || $# == 1 ]];
+  then
+    echo "Usage: "
+    echo "$ gif_join OUTPUT_GIF INPUTS..."
+  else
+    OUTPUT=$1
+    shift
+    INPUTS=$*
+    convert -delay 20 -loop 0 $INPUTS $OUTPUT || "echo SOMETHING HAS GONE WRONG - maybe try: sudo apt-get install imagemagick"
   fi
 }
 
