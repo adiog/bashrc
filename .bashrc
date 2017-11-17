@@ -229,6 +229,12 @@ function jupi()
   sudo docker run -p 8888:8888 -it -v $HOME/Jupyter:/home/jovyan jupyter/tensorflow-notebook jupyter notebook
 }
 
+function jupic()
+{
+  mkdir -p $HOME/Jupyter
+  sudo docker run -p 8888:8888 -it -v $HOME/Jupyter:/Jupyter adiog/cling-jupyter
+}
+
 MARKS=$HOME/.dotfiles/.marks
 if [ -e "$MARKS" ]; then
   . $MARKS
