@@ -20,7 +20,6 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'tpope/vim-fugitive'
 Plugin 'sjl/gundo.vim'
 Plugin 'adiog/nerdtree'
-Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'vim-utils/vim-man'
 Plugin 'jpalardy/vim-slime'
 Plugin 'vim-airline/vim-airline'
@@ -35,10 +34,22 @@ Plugin 'pboettch/vim-cmake-syntax'
 Plugin 'fidian/hexmode'
 Plugin 'adiog/vim-adiog'
 
+Plugin 'trevordmiller/nova-vim'
+Plugin 'junegunn/seoul256.vim'
+Plugin 'tyrannicaltoucan/vim-quantum'
+
+Plugin 'inkarkat/vim-SearchAsQuickJump'
+
+if has("gui_running")
+  Plugin 'ryanoasis/vim-devicons'
+  set guifont=DroidSansMono\ Nerd\ Font\ 11
+endif
 "Plugin 'chrisbra/NrrwRgn'
 "Plugin 'vim-scripts/Conque-GDB'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
+
+cmap <S-CR> <Plug>(SearchAsQuickJump)
 

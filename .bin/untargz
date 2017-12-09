@@ -12,6 +12,6 @@ if [[ $TARGET != "." ]]; then
 	  exit 1
   fi
 	mkdir -p $TARGET
-fi	
+fi
 (cd $TARGET && tar -xkzvf $ARCHIVE > /dev/null)
 

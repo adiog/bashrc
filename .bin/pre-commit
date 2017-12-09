@@ -8,11 +8,11 @@ function is_not_formatted()
   file=$1
   tmp=`mktemp`
   ${CLANG_FORMAT} $file > $tmp
-  diff $file $tmp > /dev/null 
+  diff $file $tmp > /dev/null
   code=$?
   rm $tmp
   if [[ $code == "0" ]];
-  then 
+  then
     return 1
   fi
 }
@@ -43,12 +43,12 @@ fi
 echo "Running pre-commit..."
 echo $MODIFIED_FILES_LIST
 
-for file in ${MODIFIED_FILES_LIST}; 
+for file in ${MODIFIED_FILES_LIST};
 do
-  for ext in ${FORMAT_EXTENSIONS}; 
+  for ext in ${FORMAT_EXTENSIONS};
   do
-    if [[ ${file} = *.$ext ]]; 
-    then 
+    if [[ ${file} = *.$ext ]];
+    then
       echo "Checking $file..."
       if [[ -e ${file} ]];
       then
@@ -63,7 +63,7 @@ do
           fi
         fi
 
-        if is_not_formatted ${file}; 
+        if is_not_formatted ${file};
         then
           echo -e "File ${file}\e[31m was not formatted\e[39m correctly."
           exit_code=1
@@ -74,7 +74,7 @@ do
           fi
         fi
 
-        if has_dos_eols ${file}; 
+        if has_dos_eols ${file};
         then
           echo -e "File ${file}\e[31m has windows EOLs\e[39m."
           exit_code=1
@@ -85,7 +85,7 @@ do
           fi
         fi
 
-        if exceeds_column_limit ${file}; 
+        if exceeds_column_limit ${file};
         then
           echo -e "File ${file}\e[31m has lines longer than ${COLUMNLIMIT:-120}\e[39m."
           exit_code=1

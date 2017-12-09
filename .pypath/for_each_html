@@ -21,10 +21,13 @@ def extract(url, selector, attrs):
                 if attr == 'text':
                     print(node.text)
                 else:
-                    print(node[attr])
+                    try:
+                        print(node[attr])
+                    except KeyError:
+                        print()
         else:
             print(node)
 
 if __name__ == '__main__':
     extract(sys.argv[1], sys.argv[2], sys.argv[3:])
-        
+

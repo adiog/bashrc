@@ -20,7 +20,8 @@ alias hg="hg -v"
 alias vim="vim -p"
 alias x="chmod +x"
 #alias g++="g++ -std=c++14 -Wall -pedantic -fsanitize=address"
-alias cmake="cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+alias make="time make"
+alias cmake="time cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
 
 alias mc=". /usr/share/mc/bin/mc-wrapper.sh"
 
@@ -32,9 +33,9 @@ function cd-git-root() {
 }
 export -f cd-git-root
 
-function cmake2clang() 
+function cmake2clang()
 {
-    if [[ $# == 0 ]]; 
+    if [[ $# == 0 ]];
     then
         CWD=`pwd`
         CMAKE_DIR=${CWD}
@@ -88,6 +89,11 @@ function mvln() {
   ln -s $2 $1
 }
 
+function copy()
+{
+  cp $1 $(dirname $1)/$2
+}
+
 function rename()
 {
   mv $1 $(dirname $1)/$2
@@ -111,7 +117,7 @@ function formatted() {
   file=$1
   tmp=`mktemp`
   clang-format $file > $tmp
-  diff -q $file $tmp 
+  diff -q $file $tmp
   code=$?
   rm $tmp
   return $code
@@ -119,9 +125,10 @@ function formatted() {
 
 function findcpp() {
   find . -name "*.cpp" \
-     -or -name "*.cc" \
+     -or -name "*.cc"  \
+     -or -name "*.c"   \
      -or -name "*.hpp" \
-     -or -name "*.h"     
+     -or -name "*.h"
 }
 
 function xgrep() {
@@ -133,7 +140,7 @@ function names() {
 }
 
 function doseol() {
-  grep -q "^M" 
+  grep -q "^M"
 }
 
 function replace() {
@@ -186,7 +193,7 @@ function video_trim()
   OUTPUT=$2
   START=$3
   LENGTH=$4
-  if [[ $# == 5 ]];
+  if [[ $# == 4 ]];
   then
     ffmpeg -i $INPUT -vcodec copy -acodec copy -ss $START -t $LENGTH $OUTPUT
   else
@@ -233,6 +240,11 @@ function jupic()
 {
   mkdir -p $HOME/Jupyter
   sudo docker run -p 8888:8888 -it -v $HOME/Jupyter:/Jupyter adiog/cling-jupyter
+}
+
+function i3t()
+{
+  /home/adiog/workspace/i3-tracker/bin/i3-tracker-spawn.sh
 }
 
 MARKS=$HOME/.dotfiles/.marks

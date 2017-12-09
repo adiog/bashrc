@@ -1,7 +1,7 @@
 #!/bin/bash
 # Copyright 2017 Aleksander Gajewski <adiog@brainfuck.pl>
 #   created:  czw, 9 lis 2017, 01:59:58
-#   modified: czw, 9 lis 2017, 03:36:30
+#   modified: Thu 30 Nov 2017 09:45:27 PM CET
 
 # BASH_CLEANUP {{{
 BASH_CLEANUP_FILE=`mktemp`
@@ -39,6 +39,14 @@ function verbose()
 base=$1
 tars=$2
 
+if [[ $# != 2 ]];
+then
+  echo "usage:"
+  echo " $ make_git BASENAME path_to_tar_gzs"
+  exit
+fi
+
+
 target_git_repo=$base
 
 if [[ ! -d $target_git_repo ]]; then
@@ -56,7 +64,7 @@ for tarpath in `ls -v -1 $tars/*`; do
   tarfile=$(basename $tarpath)
   tarname=${tarfile/.tar.gz/}
   version=${tarname/${base}-/}
-  
+
   echo "MAKE_GIT: adding $version"
   verbose
 
@@ -66,7 +74,7 @@ for tarpath in `ls -v -1 $tars/*`; do
   (cd $target_git_repo && git add . && git commit -m "$version" && git tag -a "$version" -m "$version")
   echo "MAKE_GIT: added $version"
   verbose
-  
+
   rm -fr $TEMP/*
 done
 

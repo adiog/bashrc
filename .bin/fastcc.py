@@ -6,6 +6,7 @@ from fileinput import input
 
 stl = {
     'algorithm': ['max', 'min', 'sort'],
+    'numeric': ['accumulate'],
     'array': ['array'],
     'bitset': ['bitset'],
     'iostream': ['cin', 'cout'],
@@ -22,19 +23,19 @@ stl = {
 
 cinvector = """
 template <typename T>
-istream &operator>>(istream &is, vector<T> &v) { 
-    for (auto &e : v) { 
-        is >> e; 
-    }    
+istream &operator>>(istream &is, vector<T> &v) {
+    for (auto &e : v) {
+        is >> e;
+    }
     return is;
 }"""
 
 cinarray = """
 template <typename T>
-istream &operator>>(istream &is, array<T> &a) { 
-    for (auto &e : a) { 
-        is >> e; 
-    }    
+istream &operator>>(istream &is, array<T> &a) {
+    for (auto &e : a) {
+        is >> e;
+    }
     return is;
 }"""
 

@@ -16,7 +16,7 @@ floating_modifier $mod
 bindsym $mod+Return exec "gnome-terminal.real"
 
 # start a file explorer
-bindsym $mod+Shift+Return exec "nautilus"
+bindsym $mod+Shift+Return exec "caja"
 
 # kill focused window
 bindsym Mod1+F4 kill
@@ -61,6 +61,9 @@ bindsym $mod+u fullscreen
 
 # always on top (when floating)
 bindsym $mod+Shift+u sticky toggle
+
+# hide border
+bindsym $mod+Shift+I border toggle
 
 # change container layout (stacked, tabbed, default)
 bindsym $mod+o layout stacking
@@ -174,7 +177,7 @@ bindsym XF86Calculator scratchpad show
 bindsym $mod+XF86Calculator exec "gnome-terminal -e vim && i3-msg 'move scratchpad; scratchpad show'"
 
 # lock & exit
-bindsym $mod+Shift+L exec "i3lock -n -i /home/adiog/.media/backgrounds/abstract-lock-screen.jpg"
+#bindsym $mod+Shift+L exec "i3lock -n -i /home/adiog/.media/backgrounds/abstract-lock-screen.jpg"
 bindsym $mod+Shift+XF86Sleep exec /opt/bin/i3-exit
 for_window [class="I3-exit" instance="i3-exit"] floating enable
 
@@ -183,9 +186,11 @@ bindsym $mod+y exec "kill `pidof gkrellm` || gkrellm"
 for_window [title="gkrellm"] floating enable
 bindsym $mod+f exec "kill `pidof htop` || gnome-terminal -e htop && && i3-msg 'floating enable'"
 bindsym $mod+v exec "/home/adiog/.dotfiles/.bin/qsarea.sh"
+bindsym $mod+w exec "/home/adiog/.dotfiles/.bin/qsnote.sh"
+bindsym $mod+z exec "/home/adiog/.dotfiles/.bin/qsclip.sh"
 
 # quickswitch
-bindsym $mod+Tab exec "quickswitch.py"
+bindsym $mod+Tab exec "quickswitch"
 
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+p restart
@@ -218,7 +223,7 @@ for_window [class="file_progress"] floating enable
 # common startup
 exec --no-startup-id feh --bg-center /home/adiog/.media/backgrounds/abstract-lock-screen.jpg
 exec --no-startup-id i3-msg 'workspace 1; exec firefox'
-exec --no-startup-id i3-msg 'workspace 2; exec nautilus'
+exec --no-startup-id i3-msg 'workspace 2; exec caja'
 exec --no-startup-id i3-msg 'exec "nm-applet &"'
 exec --no-startup-id i3-msg 'exec /home/adiog/.xinitrc &"'
 bindsym $mod+Shift+y exit
@@ -226,6 +231,7 @@ bindsym $mod+Shift+y exit
 # status bar
 bar {
     status_command    python3 ~/.dotfiles/i3pystatus/i3adiog.py
+#    status_command    ~/workspace/elixir-sandbox/ei3bar/ei3bar
 #    status_command    i3bar -t --bar_id 0
     position          bottom
     workspace_buttons yes
@@ -247,3 +253,22 @@ bindsym $mod+Ctrl+Shift+Prior exec "xrandr --output eDP1 --mode 1920x1080 --outp
 bindsym $mod+Insert exec i3-input -F "workspace %s" -P "Switch to workspace: "
 bindsym $mod+Shift+Insert exec i3-input -F "move container to workspace %s" -P "Move to workspace: "
 
+bindsym $mod+l exec "/home/adiog/.dotfiles/.bin/salty"
+bindsym $mod+Shift+l exec "/home/adiog/.dotfiles/.bin/i3-tracker-helper.sh USERLOCK"
+
+#exec --no-startup-id xautolock --detectsleep -time 15 -locker "/home/adiog/.dotfiles/.bin/i3-tracker-helper.sh TIMEOUT" &
+exec --no-startup-id /home/adiog/workspace/i3-tracker/bin/i3-tracker-spawn.sh
+
+# class                 border  backgr. text    indicator child_border
+client.focused          #4c7899 #285577 #ffffff #2e9ef4   #285577
+client.focused_inactive #333333 #5f676a #ffffff #484e50   #5f676a
+client.unfocused        #333333 #222222 #888888 #292d2e   #222222
+client.urgent           #2f343a #900000 #ffffff #900000   #900000
+client.placeholder      #000000 #0c0c0c #ffffff #000000   #0c0c0c
+
+client.background       #ffffff
+
+# class                 border  backgr. text    indicator child_border
+#client.focused          #8faa50 #4AA4D8 #516766 #2e9ef4   #285577
+#client.focused          #4c7899 #323232 #ff5b5b #2e9ef4   #285577
+#client.focused          #4c7899 #ff5b5b #323232 #2e9ef4   #285577
