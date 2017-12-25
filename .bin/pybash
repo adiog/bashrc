@@ -1,0 +1,47 @@
+#!/bin/bash
+# Copyright 2017 Aleksander Gajewski <adiog@brainfuck.pl>
+
+# BASH CLEANUP {{{
+# PRIVATE:
+BASH_MKTEMP="mktemp --tmpdir=/dev/shm"
+BASH_CLEANUP_FILE=`$BASH_MKTEMP`
+trap BASH_CLEANUP EXIT
+
+function BASH_CLEANUP() {
+  tac $BASH_CLEANUP_FILE | bash
+  rm $BASH_CLEANUP_FILE
+}
+
+# PUBLIC:
+function FINALLY() {
+  echo "$*" >> $BASH_CLEANUP_FILE
+}
+
+function MKTEMP() {
+  BASH_TMP=`$BASH_MKTEMP --suffix=$1`
+  FINALLY "rm $BASH_TMP"
+  echo $BASH_TMP
+}
+
+function MKTEMP_DIR() {
+  BASH_TMP=`$BASH_MKTEMP -d`
+  FINALLY "rm -fr $BASH_TMP"
+  echo $BASH_TMP
+}
+# }}}
+
+
+pybash_script=$1
+shift 1
+SCRIPT=`MKTEMP .py`
+
+(
+echo "import sys"
+echo "from pybash import *"
+echo ""
+echo "argv = sys.argv"
+cat $pybash_script
+) > $SCRIPT
+
+python3.6 $SCRIPT $@
+
