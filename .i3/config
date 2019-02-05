@@ -185,9 +185,11 @@ for_window [class="I3-exit" instance="i3-exit"] floating enable
 bindsym $mod+y exec "kill `pidof gkrellm` || gkrellm"
 for_window [title="gkrellm"] floating enable
 bindsym $mod+f exec "kill `pidof htop` || gnome-terminal -e htop && && i3-msg 'floating enable'"
-bindsym $mod+v exec "/home/adiog/.dotfiles/.bin/qsarea.sh"
-bindsym $mod+w exec "/home/adiog/.dotfiles/.bin/qsnote.sh"
-bindsym $mod+z exec "/home/adiog/.dotfiles/.bin/qsclip.sh"
+
+# quicksave
+bindsym $mod+z exec "/home/adiog/.quicksave/bin/qsarea.sh"
+bindsym $mod+v exec "/home/adiog/.quicksave/bin/qsclip.sh"
+bindsym $mod+w exec "/home/adiog/.quicksave/bin/qsnote.sh"
 
 # quickswitch
 bindsym $mod+Tab exec "quickswitch"
