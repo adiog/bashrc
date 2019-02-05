@@ -230,7 +230,7 @@ bindsym $mod+Shift+y exit
 
 # status bar
 bar {
-    status_command py3status
+    status_command py3status -c /home/adiog/.i3/i3status.conf
 #python3 ~/.dotfiles/i3pystatus/i3adiog.py
 #    status_command    ~/workspace/elixir-sandbox/ei3bar/ei3bar
 #    status_command    i3bar -t --bar_id 0
@@ -255,7 +255,7 @@ bindsym $mod+l exec "/home/adiog/.dotfiles/.bin/salty"
 bindsym $mod+Shift+l exec "/home/adiog/.dotfiles/.bin/i3-tracker-helper.sh USERLOCK"
 
 #exec --no-startup-id xautolock --detectsleep -time 15 -locker "/home/adiog/.dotfiles/.bin/i3-tracker-helper.sh TIMEOUT" &
-exec --no-startup-id /home/adiog/workspace/i3-tracker/bin/i3-tracker-spawn.sh
+exec --no-startup-id /home/adiog/.i3/tracker/bin/i3-tracker-spawn.sh
 
 # class                 border  backgr. text    indicator child_border
 client.focused          #4c7899 #285577 #ffffff #2e9ef4   #285577
