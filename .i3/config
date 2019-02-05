@@ -132,30 +132,30 @@ bindsym $mod+Shift+F9 move container to workspace "X9"; workspace "X9"
 bindsym $mod+Shift+F10 move container to workspace "X10"; workspace "X10"
 
 # define output for workspace
-workspace 1 output eDP1
-workspace 2 output eDP1
-workspace 3 output eDP1
-workspace 4 output eDP1
-workspace 5 output eDP1
-workspace 6 output eDP1
-workspace 7 output eDP1
-workspace 8 output eDP1
-workspace 9 output eDP1
-workspace 10 output eDP1
-workspace 11 output eDP1
-workspace 12 output eDP1
+workspace 1 output DVI-D-1
+workspace 2 output DVI-D-1
+workspace 3 output DVI-D-1
+workspace 4 output DVI-D-1
+workspace 5 output DVI-D-1
+workspace 6 output DVI-D-1
+workspace 7 output DVI-D-1
+workspace 8 output DVI-D-1
+workspace 9 output DVI-D-1
+workspace 10 output DVI-D-1
+workspace 11 output DVI-D-1
+workspace 12 output DVI-D-1
 
 # define output for workspace (second row)
-workspace "X1" output eDP1
-workspace "X2" output eDP1
-workspace "X3" output eDP1
-workspace "X4" output eDP1
-workspace "X5" output HDMI1
-workspace "X6" output HDMI1
-workspace "X7" output HDMI1
-workspace "X8" output HDMI1
-workspace "X9" output HDMI1
-workspace "X10" output HDMI1
+workspace "X1" output HDMI-1
+workspace "X2" output HDMI-1
+workspace "X3" output HDMI-1
+workspace "X4" output HDMI-1
+workspace "X5" output HDMI-1
+workspace "X6" output HDMI-1
+workspace "X7" output HDMI-1
+workspace "X8" output HDMI-1
+workspace "X9" output HDMI-1
+workspace "X10" output HDMI-1
 
 # named workspaces
 bindsym XF86WebCam workspace Extra
@@ -230,25 +230,23 @@ bindsym $mod+Shift+y exit
 
 # status bar
 bar {
-    status_command    python3 ~/.dotfiles/i3pystatus/i3adiog.py
+    status_command py3status
+#python3 ~/.dotfiles/i3pystatus/i3adiog.py
 #    status_command    ~/workspace/elixir-sandbox/ei3bar/ei3bar
 #    status_command    i3bar -t --bar_id 0
     position          bottom
     workspace_buttons yes
-    # output            eDP1
+    # output            DVI-D-1
 }
 
 # Sreen brightness controls
 bindsym XF86MonBrightnessUp exec xbacklight -inc 5 # increase screen brightness
 bindsym XF86MonBrightnessDown exec xbacklight -dec 5 # decrease screen brightness
 
-bindsym $mod+Ctrl+Shift+Down exec "xrandr --output eDP1 --mode 1920x1080 --output HDMI1 --off"
-bindsym $mod+Ctrl+Shift+Left exec "xrandr --output eDP1 --off --output HDMI1 --mode 1920x1080"
-bindsym $mod+Ctrl+Shift+Right exec "xrandr --output eDP1 --off --output HDMI1 --mode 3840x2160"
-
-bindsym $mod+Ctrl+Shift+Next exec "xrandr --output eDP1 --mode 1920x1080 --output HDMI1 --mode 2560x1440 --right-of eDP1"
-bindsym $mod+Ctrl+Shift+Up exec "xrandr --output eDP1 --mode 1920x1080 --output HDMI1 --mode 3840x2160 --above eDP1"
-bindsym $mod+Ctrl+Shift+Prior exec "xrandr --output eDP1 --mode 1920x1080 --output HDMI1 --mode 2560x1440 --left-of eDP1"
+bindsym $mod+Ctrl+Shift+Left exec "python3 /home/adiog/.i3/switch_resolution.py left"
+bindsym $mod+Ctrl+Shift+Right exec "python3 /home/adiog/.i3/switch_resolution.py right"
+bindsym $mod+Ctrl+Shift+Up exec "python3 /home/adiog/.i3/switch_resolution.py up"
+bindsym $mod+Ctrl+Shift+Down exec "python3 /home/adiog/.i3/switch_resolution.py down"
 
 bindsym $mod+Insert exec i3-input -F "workspace %s" -P "Switch to workspace: "
 bindsym $mod+Shift+Insert exec i3-input -F "move container to workspace %s" -P "Move to workspace: "

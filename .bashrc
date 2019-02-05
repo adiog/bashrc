@@ -247,6 +247,19 @@ function i3t()
   /home/adiog/workspace/i3-tracker/bin/i3-tracker-spawn.sh
 }
 
+function now()
+{
+  date +%y_%m_%d-%H_%M_%S
+}
+
+function log()
+{
+  args=$*
+  args=${args// /_}
+  logfile=${args}-$(now).log
+  (echo $*; echo; time $*) | tee -a ${logfile}
+}
+
 MARKS=$HOME/.dotfiles/.marks
 if [ -e "$MARKS" ]; then
   . $MARKS
